@@ -74,6 +74,8 @@ class ApiController extends Controller
         }
     }
 
+
+    // User Update
     public function updateUser(Request $request, $id)
     {
         if ($request->isMethod('put')) {
@@ -81,6 +83,16 @@ class ApiController extends Controller
             // dd($userData);
             User::where('id', $id)->update(['name' => $userData['name'], 'password' => bcrypt($userData['password']), 'email' => $userData['email']]);
             return response()->json(['message' => 'User updated successfully'], 202);
+        }
+    }
+
+    // update username just single record
+    public function updateUsername(Request $request, $id)
+    {
+        if ($request->isMethod('patch')) {
+            $userData = $request->input();
+            User::where('id', $id )->update(['name' => $userData['name']]);
+            return response()->json(['message' => 'Username updated successfully'], 202);
         }
     }
 }

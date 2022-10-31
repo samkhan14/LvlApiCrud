@@ -23,4 +23,8 @@ Route::post('add-user', 'App\Http\Controllers\Api\ApiController@addUser');
 
 Route::post('add-multiple-data', 'App\Http\Controllers\Api\ApiController@addmultipledata');
 
+// update single or multiple data
 Route::put('update-user/{id}', 'App\Http\Controllers\Api\ApiController@updateUser');
+
+// update single data
+Route::patch('update-username/{id}', 'App\Http\Controllers\Api\ApiController@updateUsername');
