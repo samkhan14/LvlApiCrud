@@ -73,4 +73,14 @@ class ApiController extends Controller
             return response()->json(['message' => 'Multi Users added successfully'], 201);
         }
     }
+
+    public function updateUser(Request $request, $id)
+    {
+        if ($request->isMethod('put')) {
+            $userData = $request->input();
+            // dd($userData);
+            User::where('id', $id)->update(['name' => $userData['name'], 'password' => bcrypt($userData['password']), 'email' => $userData['email']]);
+            return response()->json(['message' => 'User updated successfully'], 202);
+        }
+    }
 }

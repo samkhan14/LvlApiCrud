@@ -22,3 +22,5 @@ Route::get('users/{id?}', 'App\Http\Controllers\Api\ApiController@getusers');
 Route::post('add-user', 'App\Http\Controllers\Api\ApiController@addUser');
 
 Route::post('add-multiple-data', 'App\Http\Controllers\Api\ApiController@addmultipledata');
+
+Route::put('update-user/{id}', 'App\Http\Controllers\Api\ApiController@updateUser');
