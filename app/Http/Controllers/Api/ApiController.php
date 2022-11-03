@@ -95,4 +95,13 @@ class ApiController extends Controller
             return response()->json(['message' => 'Username updated successfully'], 202);
         }
     }
+
+    // delete user
+    public function deleteUser($id)
+    {
+        User::where('id', $id)->delete();
+        return response()->json(['message' => 'User deleted successfully'], 202);
+    }
+
+
 }

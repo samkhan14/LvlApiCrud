@@ -28,3 +28,5 @@ Route::put('update-user/{id}', 'App\Http\Controllers\Api\ApiController@updateUse
 
 // update single data
 Route::patch('update-username/{id}', 'App\Http\Controllers\Api\ApiController@updateUsername');
+
+Route::delete('delete-user/{id}', 'App\Http\Controllers\Api\ApiController@deleteUser');
