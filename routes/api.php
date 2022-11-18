@@ -19,7 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('users/{id?}', 'App\Http\Controllers\Api\ApiController@getusers');
+//secure users list
+Route::post('users-list', 'App\Http\Controllers\Api\ApiController@getusersLists');
 Route::post('add-user', 'App\Http\Controllers\Api\ApiController@addUser');
+// API User Register with Authentication API TOKEN
+Route::post('register-user', 'App\Http\Controllers\Api\ApiController@registerUser');
 
 Route::post('add-multiple-data', 'App\Http\Controllers\Api\ApiController@addmultipledata');
 
@@ -30,3 +34,9 @@ Route::put('update-user/{id}', 'App\Http\Controllers\Api\ApiController@updateUse
 Route::patch('update-username/{id}', 'App\Http\Controllers\Api\ApiController@updateUsername');
 
 Route::delete('delete-user/{id}', 'App\Http\Controllers\Api\ApiController@deleteUser');
+
+Route::delete('delete-multiple-users/{ids}', 'App\Http\Controllers\Api\ApiController@MultipledeleteUser');
+// Login Api User login adn update / return API TOKEN
+Route::post('user-login', 'App\Http\Controllers\Api\ApiController@userLogin');
+//Logout User Api
+Route::post('user-logout', 'App\Http\Controllers\Api\ApiController@userLogout');
