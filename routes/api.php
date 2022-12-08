@@ -40,5 +40,7 @@ Route::delete('delete-user/{id}', 'App\Http\Controllers\Api\ApiController@delete
 Route::delete('delete-multiple-users/{ids}', 'App\Http\Controllers\Api\ApiController@MultipledeleteUser');
 // Login Api User login adn update / return API TOKEN
 Route::post('user-login', 'App\Http\Controllers\Api\ApiController@userLogin');
+// Login Api User login adn update / return API PASSPORT TOKEN
+Route::post('user-login-with-passport', 'App\Http\Controllers\Api\ApiController@userLoginWithPassport');
 //Logout User Api
 Route::post('user-logout', 'App\Http\Controllers\Api\ApiController@userLogout');

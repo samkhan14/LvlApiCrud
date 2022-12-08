@@ -158,13 +158,12 @@ class ApiController extends Controller
                 //UPDATE ACCESS_TOKEN IN USERS TABLE
                 User::where('email', $data['email'])->update(['api_token' => $accessToken]);
                 return response()->json(['status' => true, 'message' => 'User registered successfully with Passport Authentication', 'token' => $accessToken], 201);
-            }
-            else{
+            } else {
                 $msg = "User registration failed";
                 return response()->json(['status' => false, 'message' => $msg], 422);
             }
 
-           //    return response()->json(['status' => true, 'message' => 'User registered successfully', 'token' => $accessToken], 201);
+            //    return response()->json(['status' => true, 'message' => 'User registered successfully', 'token' => $accessToken], 201);
         }
     }
 
@@ -241,6 +240,26 @@ class ApiController extends Controller
         }
     }
 
+    //User Login API With Passport Token
+    public function userLoginWithPassport(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+
+            if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+                $user = User::where('email', $data['email'])->first();
+                // GENERATE ACCESS_TOKEN WITH PASSPORT
+                $accessToken = $user->createToken($data['email'])->accessToken;
+                //UPDATE ACCESS_TOKEN IN USERS TABLE
+                User::where('email', $data['email'])->update(['api_token' => $accessToken]);
+                return response()->json(['status' => true, 'message' => 'User Login successfully with Passport Authentication', 'token' => $accessToken], 201);
+            } else {
+                $msg = "User Login failed";
+                return response()->json(['status' => false, 'message' => $msg], 422);
+            }
+        }
+    }
+
     //Logout API
     public function userLogout(Request $request)
     {
@@ -248,15 +267,14 @@ class ApiController extends Controller
         if (empty($api_token)) {
             $msg = "User token is missing";
             return response()->json(['status' => false, 'message' => $msg], 422);
-        }
-        else{
+        } else {
             $api_token = str_replace("Bearer ", "", $api_token);
-            $usercount =  User::where('api_token',$api_token)->count();
+            $usercount =  User::where('api_token', $api_token)->count();
             if ($usercount > 0) {
                 // update user token to null
-                User::where('api_token',$api_token)->update(['api_token' => NULL]);
+                User::where('api_token', $api_token)->update(['api_token' => NULL]);
                 $msg = "User Logged out Successfully";
-                return response()->json(['status' => true, 'message' => $msg],200);
+                return response()->json(['status' => true, 'message' => $msg], 200);
             }
         }
     }
