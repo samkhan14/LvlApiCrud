@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Faker\Core\Number;
+use Auth;
 
 class ApiController extends Controller
 {
@@ -114,6 +115,59 @@ class ApiController extends Controller
         }
     }
 
+    public function registerUserWithPassport(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            //dd($data);
+
+            // all fields are required
+            if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
+                $errosmsg = "Please Fill the All Fields";
+            }
+
+            // email validation required
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $errosmsg = "Please Put correct Email Address";
+            }
+
+            // email already exists
+            $userCount = User::where('email', $data['email'])->count();
+            if ($userCount > 0) {
+                $errosmsg = "Email Address Already Exists";
+            }
+
+            if (isset($errosmsg) && !empty($errosmsg)) {
+                return response()->json(['status' => false, 'message' => $errosmsg], 422);
+            }
+
+            //Generate API Token
+            // $accessToken = Str::random(60);
+
+            $user = new User;
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = bcrypt($data['password']);
+            // $user->api_token = $accessToken;
+            $user->save();
+
+            if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+                $user = User::where('email', $data['email'])->first();
+                // GENERATE ACCESS_TOKEN WITH PASSPORT
+                $accessToken = $user->createToken($data['email'])->accessToken;
+                //UPDATE ACCESS_TOKEN IN USERS TABLE
+                User::where('email', $data['email'])->update(['api_token' => $accessToken]);
+                return response()->json(['status' => true, 'message' => 'User registered successfully with Passport Authentication', 'token' => $accessToken], 201);
+            }
+            else{
+                $msg = "User registration failed";
+                return response()->json(['status' => false, 'message' => $msg], 422);
+            }
+
+           //    return response()->json(['status' => true, 'message' => 'User registered successfully', 'token' => $accessToken], 201);
+        }
+    }
+
     // add multiple users
     public function addmultipledata(Request $request)
     {
@@ -132,7 +186,6 @@ class ApiController extends Controller
             return response()->json(['message' => 'Multi Users added successfully'], 201);
         }
     }
-
 
     // User Update
     public function updateUser(Request $request, $id)

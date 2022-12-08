@@ -24,6 +24,8 @@ Route::post('users-list', 'App\Http\Controllers\Api\ApiController@getusersLists'
 Route::post('add-user', 'App\Http\Controllers\Api\ApiController@addUser');
 // API User Register with Authentication API TOKEN
 Route::post('register-user', 'App\Http\Controllers\Api\ApiController@registerUser');
+// API User Register with Authentication Passport Access TOKEN
+Route::post('register-user-with-passport', 'App\Http\Controllers\Api\ApiController@registerUserWithPassport');
 
 Route::post('add-multiple-data', 'App\Http\Controllers\Api\ApiController@addmultipledata');
 
